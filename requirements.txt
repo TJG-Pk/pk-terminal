@@ -1,6 +1,6 @@
 streamlit
 streamlit-lightweight-charts
 pandas
+numpy
 requests
 plotly
-webull

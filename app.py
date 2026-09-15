@@ -1,71 +1,58 @@
 import streamlit as st
 import streamlit.components.v1 as components
 
-# 1. ตั้งค่าหน้าจอแบบ Wide และซ่อน Sidebar
+# 1. ตั้งค่าเลย์เอาต์พื้นฐานแบบ Wide
 st.set_page_config(
-    page_title="PK Terminal - Dukascopy Official Embed",
+    page_title="PK Terminal - Dukascopy Full View",
     layout="wide",
     initial_sidebar_state="collapsed"
 )
 
-# 2. ปรับ CSS ลบขอบ ลบ Header/Footer เพื่อให้แสดงผลเต็มหน้าจอ 100%
+# 2. CSS บังคับทำลายขอบ Padding และซ่อน UI เดิมของ Streamlit ทุกจุด
 st.markdown("""
     <style>
-        [data-testid="stMainBlockContainer"] {
-            padding: 0rem !important;
+        /* ซ่อน Header, Footer และ Menu Bar ของ Streamlit */
+        header[data-testid="stHeader"], footer, #MainMenu {
+            display: none !important;
+            height: 0px !important;
+        }
+
+        /* ลบ Padding/Margin ของแอป Streamlit ทุกชั้นให้กว้าง-สูง 100% เต็มจอ */
+        html, body, 
+        [data-testid="stAppViewContainer"], 
+        [data-testid="stMain"], 
+        .main, 
+        .block-container {
+            padding: 0 !important;
+            margin: 0 !important;
+            width: 100vw !important;
+            height: 100vh !important;
             max-width: 100% !important;
+            overflow: hidden !important;
+            background-color: #0B0E14 !important;
         }
-        header, footer, #MainMenu { 
-            visibility: hidden; 
-            height: 0px; 
-        }
-        .stApp { 
-            background-color: #0B0E14; 
+
+        /* บังคับ Component Iframe ให้ขยายเต็มความสูงและกว้างของจอภาพ */
+        [data-testid="stCustomComponentV1"], iframe {
+            width: 100vw !important;
+            height: 100vh !important;
+            border: none !important;
         }
     </style>
 """, unsafe_allow_html=True)
 
-# 3. HTML Container รัน Script สดของ Dukascopy ตามรูปแบบที่กำหนด
-dukascopy_embed_html = """
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <style>
-        html, body {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100vh;
-            background-color: #0B0E14;
-            overflow: hidden;
-        }
-    </style>
-</head>
-<body>
-    <script>
-    (() => {
-      const script = document.createElement('script');
-      script.src = 'https://widgets.dukascopy.com/embed/embed.js';
-      script.async = true;
-      script.type = 'text/javascript';
-      script.innerHTML = JSON.stringify({
-        "type": "chart",
-        "theme": "dark",
-        "lang": "en",
-        "params": {
-          "instrument": "XAU/USD",
-          "interval": "1H",
-          "series": "CANDLES",
-          "offer": "BID"
-        }
-      });
-      document.currentScript?.parentNode?.insertBefore(script, document.currentScript.nextSibling);
-    })();
-    </script>
-</body>
-</html>
+# 3. Embed Dukascopy Engine ปรับสัดส่วนเป็น 100% Viewport
+dukascopy_html = """
+<div style="width: 100vw; height: 100vh; background-color: #0B0E14; margin: 0; padding: 0; overflow: hidden;">
+    <iframe src="https://freeserv.dukascopy.com/widget/container/chart/3?width=100%25&height=100%25&interval=1&plot_type=candle&points=100&bars=1&price_type=bid&time_zone=7&show_tools=1&show_indicators=1&show_timeframes=1&show_symbols=1" 
+            width="100%" 
+            height="100%" 
+            frameborder="0" 
+            scrolling="no"
+            style="border: none; width: 100vw; height: 100vh; display: block;">
+    </iframe>
+</div>
 """
 
-# 4. เรนเดอร์บน Streamlit ความสูง 920px เต็มจอ
-components.html(dukascopy_embed_html, height=920, scrolling=False)
+# 4. ส่งออกหน้าจอ
+components.html(dukascopy_html, height=2000, scrolling=False)

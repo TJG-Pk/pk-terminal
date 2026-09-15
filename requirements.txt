@@ -1,4 +1,6 @@
 streamlit
 streamlit-lightweight-charts
 pandas
-websocket-client
+requests
+plotly
+yfinance

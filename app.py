@@ -1,21 +1,21 @@
 import streamlit as st
 import streamlit.components.v1 as components
 
-# 1. ตั้งค่าหน้าจอแบบ Wide
+# 1. Page Config
 st.set_page_config(
-    page_title="PK Terminal - Dukascopy Swiss ECN",
+    page_title="PK Terminal - Dukascopy 10s/15s Sub-swing",
     layout="wide",
     initial_sidebar_state="collapsed"
 )
 
-# 2. ปรับแต่ง CSS ลบขอบขาว
+# 2. ปรับแต่ง CSS ขยายเต็มหน้าจอ
 st.markdown("""
     <style>
         .block-container {
-            padding-top: 1rem !important;
+            padding-top: 0.5rem !important;
             padding-bottom: 0rem !important;
-            padding-left: 1rem !important;
-            padding-right: 1rem !important;
+            padding-left: 0.5rem !important;
+            padding-right: 0.5rem !important;
         }
         header { visibility: hidden; }
         footer { visibility: hidden; }
@@ -23,62 +23,42 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# 3. ส่วนเลือกสินทรัพย์
-col_title, col_sym = st.columns([2, 1])
-with col_title:
-    st.markdown("<h3 style='color:#F59E0B; margin:0; font-weight:800;'>⚡ DUKASCOPY SWISS ECN LIVE TERMINAL</h3>", unsafe_allow_html=True)
-with col_sym:
-    selected_asset = st.selectbox(
-        "🪙 เลือก Feed สินทรัพย์ (Dukascopy Direct):",
-        ["DUKASCOPY:XAUUSD", "DUKASCOPY:EURUSD", "DUKASCOPY:GBPUSD", "DUKASCOPY:USDJPY"],
-        index=0
-    )
+st.markdown("""
+    <div style='display:flex; justify-content:space-between; align-items:center; margin-bottom: 6px;'>
+        <h3 style='color:#F59E0B; margin:0; font-weight:800;'>⚡ DUKASCOPY SWISS ECN — SUB-SWING TERMINAL</h3>
+        <span style='color:#22C55E; font-size:12px; font-weight:bold;'>🟢 Timeframes Enabled: 10s | 15s | 30s | 1m</span>
+    </div>
+""", unsafe_allow_html=True)
 
-# 4. HTML5 Widget Container (TradingView Engine Direct to Dukascopy ECN Feed)
-tv_dukascopy_html = f"""
+# 3. Direct Dukascopy HTML5 Engine Embed (เปิด Permission ครบถ้วน)
+dukascopy_direct_html = """
 <!DOCTYPE html>
 <html>
 <head>
     <style>
-        html, body {{
+        html, body {
             margin: 0;
             padding: 0;
             width: 100%;
             height: 100%;
             background-color: #0B0E14;
             overflow: hidden;
-        }}
-        .tradingview-widget-container {{
+        }
+        iframe {
             width: 100%;
-            height: 100%;
-        }}
+            height: 100vh;
+            border: none;
+        }
     </style>
 </head>
 <body>
-    <div class="tradingview-widget-container">
-        <div id="tradingview_chart" style="width: 100%; height: 100%;"></div>
-        <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
-        <script type="text/javascript">
-            new TradingView.widget({{
-                "width": "100%",
-                "height": "750",
-                "symbol": "{selected_asset}",
-                "interval": "1",
-                "timezone": "Asia/Bangkok",
-                "theme": "dark",
-                "style": "1",
-                "locale": "th_TH",
-                "toolbar_bg": "#0B0E14",
-                "enable_publishing": false,
-                "hide_side_toolbar": false,
-                "allow_symbol_change": true,
-                "container_id": "tradingview_chart"
-            }});
-        </script>
-    </div>
+    <iframe src="https://www.dukascopy.com/swiss/english/fx-market-tools/charts/xau-usd/"
+            sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-modals"
+            allow="autoplay; fullscreen">
+    </iframe>
 </body>
 </html>
 """
 
-# 5. แสดงผลบน Streamlit
-components.html(tv_dukascopy_html, height=760, scrolling=False)
+# 4. เรนเดอร์บน Streamlit
+components.html(dukascopy_direct_html, height=800, scrolling=False)

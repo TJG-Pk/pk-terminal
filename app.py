@@ -1,64 +1,43 @@
 import streamlit as st
 import streamlit.components.v1 as components
 
-# 1. Page Config
-st.set_page_config(
-    page_title="PK Terminal - Dukascopy 10s/15s Sub-swing",
-    layout="wide",
-    initial_sidebar_state="collapsed"
-)
+st.set_page_config(page_title="PK Terminal - Dukascopy Swiss ECN", layout="wide")
 
-# 2. ปรับแต่ง CSS ขยายเต็มหน้าจอ
 st.markdown("""
     <style>
-        .block-container {
-            padding-top: 0.5rem !important;
-            padding-bottom: 0rem !important;
-            padding-left: 0.5rem !important;
-            padding-right: 0.5rem !important;
-        }
-        header { visibility: hidden; }
-        footer { visibility: hidden; }
-        .stApp { background-color: #0B0E14; }
+    .stApp { background-color: #0B0E14; color: #E2E8F0; }
+    .popout-card {
+        background-color: #121620;
+        border: 1px solid #1E2638;
+        border-radius: 12px;
+        padding: 24px;
+        text-align: center;
+        margin-top: 20px;
+    }
+    .btn-dukascopy {
+        background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+        color: #000000 !important;
+        font-weight: 800;
+        font-size: 16px;
+        padding: 12px 28px;
+        border-radius: 8px;
+        text-decoration: none;
+        display: inline-block;
+        margin-top: 15px;
+    }
     </style>
 """, unsafe_allow_html=True)
 
+st.title("⚡ DUKASCOPY SWISS ECN — LIVE TERMINAL")
+
+# การ์ดควบคุมเปิดหน้าต่าง Pop-out
 st.markdown("""
-    <div style='display:flex; justify-content:space-between; align-items:center; margin-bottom: 6px;'>
-        <h3 style='color:#F59E0B; margin:0; font-weight:800;'>⚡ DUKASCOPY SWISS ECN — SUB-SWING TERMINAL</h3>
-        <span style='color:#22C55E; font-size:12px; font-weight:bold;'>🟢 Timeframes Enabled: 10s | 15s | 30s | 1m</span>
+    <div class="popout-card">
+        <h2 style="color:#F59E0B; margin-top:0;">🇨🇭 DUKASCOPY DIRECT SWISS ECN FEED</h2>
+        <p style="color:#A0AEC0;">เนื่องจากระบบความปลอดภัยของ Dukascopy บล็อกการฝังหน้าเว็บข้ามโดเมน (X-Frame-Options)</p>
+        <p style="color:#F8FAFC;">กดปุ่มด้านล่างเพื่อเปิดหน้าต่างกราฟ <b>XAU/USD Sub-swing (10s / 15s / 30s)</b> สดตรงจากโบรกเกอร์สวิสแบบเต็มจอ 100%</p>
+        <a href="https://www.dukascopy.com/swiss/english/fx-market-tools/charts/xau-usd/" target="_blank" class="btn-dukascopy">
+            🚀 Launch Dukascopy 10s/15s Chart Window
+        </a>
     </div>
 """, unsafe_allow_html=True)
-
-# 3. Direct Dukascopy HTML5 Engine Embed (เปิด Permission ครบถ้วน)
-dukascopy_direct_html = """
-<!DOCTYPE html>
-<html>
-<head>
-    <style>
-        html, body {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100%;
-            background-color: #0B0E14;
-            overflow: hidden;
-        }
-        iframe {
-            width: 100%;
-            height: 100vh;
-            border: none;
-        }
-    </style>
-</head>
-<body>
-    <iframe src="https://www.dukascopy.com/swiss/english/fx-market-tools/charts/xau-usd/"
-            sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-modals"
-            allow="autoplay; fullscreen">
-    </iframe>
-</body>
-</html>
-"""
-
-# 4. เรนเดอร์บน Streamlit
-components.html(dukascopy_direct_html, height=800, scrolling=False)

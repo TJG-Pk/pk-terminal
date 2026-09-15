@@ -1,40 +1,65 @@
 import streamlit as st
 import streamlit.components.v1 as components
 
-# 1. ตั้งค่าเลย์เอาต์พื้นฐานแบบ Wide
-st.set_page_config(
-    page_title="PK Terminal",
-    layout="wide",
-    initial_sidebar_state="collapsed"
-)
+# 1. ตั้งค่าเลย์เอาต์พื้นฐานแบบเต็มความกว้าง (Wide Mode)
+st.set_page_config(page_title="Dukascopy Chart Terminal", layout="wide")
 
-# 2. CSS แบบปลอดภัย (ไม่กระทบโครงสร้างหลักของ Streamlit Cloud)
+# 2. ลบ Padding ขอบขาวภายนอกแบบปลอดภัย (ไม่กระทบโครงสร้าง React ของ Streamlit)
 st.markdown("""
     <style>
-        #MainMenu {visibility: hidden;}
-        footer {visibility: hidden;}
         header {visibility: hidden;}
+        footer {visibility: hidden;}
+        #MainMenu {visibility: hidden;}
         .block-container {
             padding-top: 0rem !important;
             padding-bottom: 0rem !important;
-            padding-left: 0.5rem !important;
-            padding-right: 0.5rem !important;
+            padding-left: 0rem !important;
+            padding-right: 0rem !important;
+            max-width: 100% !important;
         }
     </style>
 """, unsafe_allow_html=True)
 
-# 3. HTML Embed ตัวกราฟ Dukascopy
-dukascopy_html = """
-<div style="width: 100%; height: 85vh; background-color: #0B0E14;">
-    <iframe src="https://freeserv.dukascopy.com/widget/container/chart/3?width=100%25&height=100%25&interval=1&plot_type=candle&points=100&bars=1&price_type=bid&time_zone=7&show_tools=1&show_indicators=1&show_timeframes=1&show_symbols=1" 
-            width="100%" 
-            height="100%" 
-            frameborder="0" 
-            scrolling="no"
-            style="border: none;">
-    </iframe>
-</div>
+# 3. โครงสร้าง HTML สำหรับรัน Script ของ Dukascopy ที่คุณส่งมา
+dukascopy_script_html = """
+<!DOCTYPE html>
+<html style="height: 100%; width: 100%;">
+<head>
+    <meta charset="utf-8">
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #ffffff;
+        }
+        /* บังคับให้ Element ที่ Script สร้างขึ้นขยายเต็มพื้นที่ 100% */
+        body > div, iframe {
+            width: 100% !important;
+            height: 100% !important;
+            border: none !important;
+        }
+    </style>
+</head>
+<body>
+    <script src="https://widgets.dukascopy.com/embed/embed.js" async>
+    {
+      "type": "chart",
+      "theme": "light",
+      "lang": "en",
+      "params": {
+        "instrument": "EUR/USD",
+        "interval": "1H",
+        "series": "CANDLES",
+        "offer": "BID"
+      }
+    }
+    </script>
+</body>
+</html>
 """
 
-# 4. แสดงผล Component
-components.html(dukascopy_html, height=800, scrolling=False)
+# 4. ดึงขึ้นแสดงผลบน Streamlit พร้อมตั้งความสูงเป็น 900px ให้ใหญ่เต็มจอ
+components.html(dukascopy_script_html, height=900, scrolling=False)

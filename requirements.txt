@@ -3,4 +3,4 @@ streamlit-lightweight-charts
 pandas
 requests
 plotly
-yfinance
+webull

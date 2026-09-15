@@ -1,52 +1,54 @@
 import streamlit as st
 import streamlit.components.v1 as components
 
-# 1. ตั้งค่าหน้าจอแบบ Wide
+# 1. ตั้งค่า Wide Page
 st.set_page_config(
-    page_title="PK Terminal - Dukascopy Script Widget",
+    page_title="PK Terminal - Dukascopy Fullscreen",
     layout="wide",
     initial_sidebar_state="collapsed"
 )
 
-# 2. ปรับแต่ง CSS ลบขอบขาว
+# 2. ลบ Padding/Margin ของ Streamlit ออกทั้งหมดเพื่อขยายเต็มจอ 100%
 st.markdown("""
     <style>
-        .block-container {
-            padding-top: 1rem !important;
+        /* ขยาย Main Container ให้เต็มขอบความกว้างและความสูง */
+        [data-testid="stMainBlockContainer"] {
+            padding-top: 0.5rem !important;
             padding-bottom: 0rem !important;
-            padding-left: 1rem !important;
-            padding-right: 1rem !important;
+            padding-left: 0.2rem !important;
+            padding-right: 0.2rem !important;
+            max-width: 100% !important;
         }
-        header { visibility: hidden; }
+        /* ซ่อน Header และ Footer ของ Streamlit */
+        header { visibility: hidden; height: 0px; }
         footer { visibility: hidden; }
+        #MainMenu { visibility: hidden; }
         .stApp { background-color: #0B0E14; }
     </style>
 """, unsafe_allow_html=True)
 
-st.markdown("<h3 style='color:#F59E0B; margin-bottom:10px;'>⚡ DUKASCOPY OFFICIAL EMBED WIDGET</h3>", unsafe_allow_html=True)
-
-# 3. เมนูควบคุมพารามิเตอร์แบบ Dynamic
-col1, col2, col3 = st.columns([2, 2, 2])
+# 3. เมนูควบคุมแบบกะทัดรัด (เพื่อประหยัดพื้นที่แนวตั้ง)
+col1, col2, col3, col_space = st.columns([2, 2, 2, 6])
 with col1:
     selected_instrument = st.selectbox(
-        "🪙 สินทรัพย์ (Instrument):",
+        "🪙 สินทรัพย์:",
         ["XAU/USD", "EUR/USD", "GBP/USD", "USD/JPY", "USA500.IDX"],
         index=0
     )
 with col2:
     selected_interval = st.selectbox(
-        "⏱️ Timeframe (Sub-swing & Main):",
+        "⏱️ Timeframe:",
         ["10S", "15S", "30S", "1M", "5M", "15M", "1H", "1D"],
         index=6
     )
 with col3:
     selected_theme = st.selectbox(
-        "🎨 Theme Display:",
+        "🎨 Theme:",
         ["dark", "light"],
         index=0
     )
 
-# 4. สคริปต์ Widget ของ Dukascopy Direct
+# 4. Dukascopy Widget HTML (กำหนดความสูง 100% ของ Viewport)
 dukascopy_script_html = f"""
 <!DOCTYPE html>
 <html>
@@ -63,7 +65,7 @@ dukascopy_script_html = f"""
         }}
         .widget-wrapper {{
             width: 100%;
-            height: 720px;
+            height: 100vh;
         }}
     </style>
 </head>
@@ -87,5 +89,5 @@ dukascopy_script_html = f"""
 </html>
 """
 
-# 5. แสดงผล Widget บน Streamlit
-components.html(dukascopy_script_html, height=730, scrolling=False)
+# 5. แสดงผล Component ด้วยความสูง 850px ให้เต็มจอ
+components.html(dukascopy_script_html, height=850, scrolling=False)

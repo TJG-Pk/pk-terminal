@@ -63,3 +63,18 @@ dukascopy_script_html = """
 
 # 4. ดึงขึ้นแสดงผลบน Streamlit พร้อมตั้งความสูงเป็น 900px ให้ใหญ่เต็มจอ
 components.html(dukascopy_script_html, height=900, scrolling=False)
+
+import streamlit as st
+import pandas as pd
+
+# ... (บรรทัดที่ 1 ถึง 100 โค้ดเดิมของ PK ที่มีอยู่แล้ว) ...
+st.title("โปรเจกต์เทรดของ PK")
+st.write("ข้อมูลของหน้าเดิม")
+
+# ========================================================
+# เลื่อนมาบรรทัดล่างสุด แล้ววางโค้ดของจินจินต่อท้ายตรงนี้ได้เลยค่ะ!
+# ========================================================
+import streamlit.components.v1 as components
+
+url = "https://script.google.com/macros/s/AKfycbyHn6gN2wZfvMPTYiYrcIOPbyZMpYtB4cPRUYPh0dqu0ZbS_dYLQNyUsc5jxXzItS1X/exec?v=view-lqwjrh81ZsvZ"
+components.iframe(url, height=800, scrolling=True)

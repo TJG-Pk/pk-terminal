@@ -30,7 +30,7 @@ components.iframe(url, height=800, scrolling=True)
 
 
 # ==========================================
-# ส่วนที่ 2: Chart Monitor (ด้านล่าง - XAU/USD 15m Dark Mode)
+# ส่วนที่ 2: Chart Monitor (ด้านล่าง - XAU/USD 15m Dark Mode ตัวเต็ม)
 # ==========================================
 dukascopy_script_html = """
 <!DOCTYPE html>
@@ -44,7 +44,7 @@ dukascopy_script_html = """
             width: 100%;
             height: 100%;
             overflow: hidden;
-            background-color: #131722; /* ปรับพื้นหลังเป็นสีมืดให้เนียนไปกับ Dark Theme */
+            background-color: #131722;
         }
         body > div, iframe {
             width: 100% !important;
@@ -63,8 +63,7 @@ dukascopy_script_html = """
         "instrument": "XAU/USD",
         "interval": "15m",
         "series": "CANDLES",
-        "offer": "BID",
-        "type": "minimal"
+        "offer": "BID"
       }
     }
     </script>

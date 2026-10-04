@@ -22,22 +22,16 @@ st.markdown("""
 
 
 # ==========================================
-# ส่วนที่ 1: Oi / Intraday volume (อยู่ด้านบน)
+# ส่วนที่ 1: Oi / Intraday Volume (ด้านบน)
 # ==========================================
-st.markdown("### 📊 Oi / Intraday Volume")
-
-# ลิงก์ Web App Google Apps Script
 url = "https://script.google.com/macros/s/AKfycbyHn6gN2wZfvMPTYiYrcIOPbyZMpYtB4cPRUYPh0dqu0ZbS_dYLQNyUsc5jxXzItS1X/exec?v=view-lqwjrh81ZsvZ"
 
-# ดึงขึ้นแสดงผลด้วย iframe
 components.iframe(url, height=800, scrolling=True)
 
 
 # ==========================================
-# ส่วนที่ 2: Chart Monitor (อยู่ด้านล่าง)
+# ส่วนที่ 2: Chart Monitor (ด้านล่าง - XAU/USD 15m Dark Mode)
 # ==========================================
-st.markdown("### 📈 Chart Monitor (EUR/USD)")
-
 dukascopy_script_html = """
 <!DOCTYPE html>
 <html style="height: 100%; width: 100%;">
@@ -50,7 +44,7 @@ dukascopy_script_html = """
             width: 100%;
             height: 100%;
             overflow: hidden;
-            background-color: #ffffff;
+            background-color: #131722; /* ปรับพื้นหลังเป็นสีมืดให้เนียนไปกับ Dark Theme */
         }
         body > div, iframe {
             width: 100% !important;
@@ -63,13 +57,14 @@ dukascopy_script_html = """
     <script src="https://widgets.dukascopy.com/embed/embed.js" async>
     {
       "type": "chart",
-      "theme": "light",
+      "theme": "dark",
       "lang": "en",
       "params": {
-        "instrument": "EUR/USD",
-        "interval": "1H",
+        "instrument": "XAU/USD",
+        "interval": "15m",
         "series": "CANDLES",
-        "offer": "BID"
+        "offer": "BID",
+        "type": "minimal"
       }
     }
     </script>
@@ -77,5 +72,4 @@ dukascopy_script_html = """
 </html>
 """
 
-# แสดงผลกราฟ Dukascopy
 components.html(dukascopy_script_html, height=900, scrolling=False)
